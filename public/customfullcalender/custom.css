@@ -1,0 +1,56 @@
+.calender .col-lg-2 {
+    vertical-align: middle;
+    text-align: center;
+}
+.calender .main-div {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #c6c6c6;
+    text-align: center;
+    display: inline-block;
+}
+.calender .main-div span {
+   display: block
+}
+.calender .main-div span:nth-of-type(1) {
+    margin-top: 10px;
+}
+.calender .add-calender-div span {
+    margin-top: 30px !important;
+}
+.calender .main-div .calender-footer {
+    background: #afaebc;
+    margin-top: 13px;
+}
+.calender .main-div .calender-add-footer {
+    background: #afaebc;
+    margin-top: 30px;
+}
+.calender .main-div .calender-footer span {
+    color: #fff;
+    width: 50%;
+    display: inline;
+    font-size: 20px;
+    cursor: pointer;
+}
+.calender .main-div .calender-add-footer span {
+    color: #fff;
+    display: inline;
+    font-size: 20px;
+    cursor: pointer;
+}
+.fc-event-skin.greenEvent,  .fc-event-skin.greenEvent{
+    background-color: #81c4e6 !important;
+    border-color: #81c4e6 !important;
+	text-align:center;
+}
+.fc-event-skin.redEvent,  .fc-event-skin.redEvent {
+    background-color: red !important;
+    border-color: red !important;
+	text-align:center;
+}
+.fc-event-skin.greyEvent,  .fc-event-skin.greyEvent{
+	background-color: grey !important;
+    border-color: grey !important;
+	text-align:center;
+}

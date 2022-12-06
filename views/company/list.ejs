@@ -1,0 +1,140 @@
+<% layout('../layouts/main') -%>
+
+<!-- DataTables -->
+<% stylesheet('/css/dataTables.bootstrap.min.css') %>
+
+<!-- DataTables -->
+<% script('/js/jquery.dataTables.min.js') %>
+<% script('/js/dataTables.bootstrap.min.js') %>
+
+<% block('custom_scripts', `
+<script>
+  $(document).ready(function () {
+      $('#example1').DataTable({
+          "aoColumnDefs": [
+             {'bSortable': false, 'aTargets': [1]},
+//              //{"aTargets": [3], "sClass": "text-justify"},
+//              {"sClass": "center", "aTargets": [1, 2]},
+              {"width": "9%", "targets": [0]},
+              {"width": "15%", "targets": [2]},
+//              {"width": "8%", "targets": [8]},
+//                  //{"width": "9%", "targets": [7]},
+          ],
+          "paging": true,
+          "lengthChange": true,
+          "searching": true,
+          "ordering": true,
+          "info": true,
+          "autoWidth": false,
+          "stateSave": true
+      });
+  });
+
+  $(document).ready(function () {
+      $(document).on('click', ".delete_confirmation", function (e) {
+          e.preventDefault();
+          if (confirm("Do you want delete this item")) {
+              //alert($(this).attr('href'));
+              window.location.href = $(this).attr('href');
+          }
+      });
+  });
+</script>
+`) %>
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Company
+    <!--<small>advanced tables</small>-->
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">Company</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <% if (Object.prototype.hasOwnProperty.call(flash, 'success')) { %>
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <%= flash.success %>
+  </div>
+  <% } %>
+  <% if (Object.prototype.hasOwnProperty.call(flash, 'error')) { %>
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <%= flash.error %>
+  </div>
+  <% } %>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">List of Companies</h3>
+          <div class="pull-right">
+            <a href="/company/add" class="btn btn-primary">Add New Company</a>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="example1" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Sl. No.</th>
+                <th>Company Name</th>
+                <th>Email Id</th>
+                <th>Number</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% 
+              if(company){
+              for(var i=0; len=company.length, i < len; i++) { %>
+              <tr>
+                <td>
+                  <%= (i+1) %>
+                </td>
+                <td>
+                  <%= company[i].company_name %>
+                </td>
+                <td>
+                    <%= company[i].email %>
+                </td>
+                <td>
+                    <%= company[i].contact_no %>
+                </td>
+                <td class="text-center">
+                  <a href="<%= '/company/edit/'+company[i]._id %>" class="btn btn-sm btn-primary" title="Edit"><span
+                      class="glyphicon glyphicon-edit"></span></a>
+                  <a href="<%= '/company/delete/'+company[i]._id %>" class="btn btn-sm btn-danger delete_confirmation" title="Delete"><span class="glyphicon glyphicon-trash"></span></a>
+                </td>
+              </tr>
+              <% 
+              }
+              }
+              %>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Sl. No.</th>
+                <th>Company Name</th>
+                <th>Email Id</th>
+                <th>Number</th>
+                <th>Action</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>
+<!-- /.content -->

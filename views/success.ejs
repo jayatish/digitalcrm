@@ -1,0 +1,46 @@
+<!------ Include the above in your HEAD tag ---------->
+<head>
+	<title>Invoice App</title>
+	<link rel="icon" type="image/png" href="/images/icons/Invoice_app_fav_icon.png" />
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<style>
+	body {
+		background: #dedede;
+	}
+	.page-wrap {
+		min-height: 100vh;
+	}
+	</style>
+</head>
+<body>
+    <div class="page-wrap d-flex flex-row align-items-center">
+		<div class="container">
+			<div class="row justify-content-center">
+                <!-- <div class="col-md-12 text-center">
+					<span class="display-1 d-block">200</span>
+					<div class="mb-4 lead" style="font-size: 3rem;">Update successful</div>
+                </div> -->
+                <%
+				if(Object.prototype.hasOwnProperty.call(flash, 'success')) {
+                %>
+                <div class="col-md-12 text-center">
+					<!-- <span class="display-1 d-block">200</span> -->
+					<div class="mb-4 lead" style="font-size: 3rem;"><%= flash.success %></div>
+				</div>
+                <%
+                } else {
+                %>
+                <script type="text/javascript">
+					$(function () {
+						window.location.href = '/'
+					})
+				</script>
+                <%
+                }
+                %>
+            </div>
+		</div>
+	</div>
+</body>

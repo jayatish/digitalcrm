@@ -1,0 +1,234 @@
+<% layout('../layouts/main') -%>
+<% script('/js/form-validation/region.js') -%>
+<% var test ='myString'; %>
+<script>
+    var data = JSON.parse('<%- JSON.stringify(data)  %>');
+</script>
+<% block('custom_scripts', `
+<script>
+    
+  function goBack() {
+    window.history.back();
+  }
+
+    $(function() {
+        renderCityDropdown(data.data.country, data.data.state, data.data.city);
+        renderStateDropdown(data.data.country, data.data.state);
+    });
+
+
+    function changeCountry(val) {
+       $('#state').html("<option value=''>Select State</option>");
+       $('#city').html("<option value=''>Select City</option>");
+       $.post("https://countriesnow.space/api/v0.1/countries/states", {
+        country: val
+       }, function(data, status) {
+           let optionValue = "<option value=''>Select State</option>";
+           for(var i = 0; i < data.data.states.length; i++) {
+            optionValue += "<option value='"+data.data.states[i].name+"'>"+data.data.states[i].name+"</option>"
+           }
+           $('#state').html(optionValue);
+       });
+    }
+
+    function changeState(state, country) {
+        $('#city').html("<option value=''>Select City</option>");
+        $.post("https://countriesnow.space/api/v0.1/countries/state/cities", {
+            state: state,
+            country: country
+       }, function(data, status) {
+           let optionValue = "<option value=''>Select City</option>";
+           for(var i = 0; i < data.data.length; i++) {
+            optionValue += "<option value='"+data.data[i]+"'>"+data.data[i]+"</option>"
+           }
+           $('#city').html(optionValue);
+       });
+    }
+
+    function renderCityDropdown(country, state, city) {
+        $.post("https://countriesnow.space/api/v0.1/countries/state/cities", {
+            state: state,
+            country: country
+       }, function(data, status) {
+           let optionValue = "<option value=''>Select City</option>";
+           for(var i = 0; i < data.data.length; i++) {
+                let selected = "";
+                if(data.data[i] == city) {
+                    selected = "selected";
+                }
+                optionValue += "<option value='"+data.data[i]+"' "+selected+">"+data.data[i]+"</option>"
+           }
+           $('#city').html(optionValue);
+       });
+    }
+
+    function renderStateDropdown(country, state) {
+        $.post("https://countriesnow.space/api/v0.1/countries/states", {
+            country: country
+        }, function(data, status) {
+            let optionValue = "<option value=''>Select State</option>";
+            for(var i = 0; i < data.data.states.length; i++) {
+                let selected = "";
+                if(data.data.states[i].name == state) {
+                    selected = "selected";
+                }
+                optionValue += "<option value='"+data.data.states[i].name+"' "+selected+">"+data.data.states[i].name+"</option>"
+            }
+            $('#state').html(optionValue);
+        });
+    }
+</script>
+`) %>
+
+<% block('custom_style', `
+<style type="text/css">
+  em{
+    color: red
+  }
+</style>
+`) %>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Edit Company
+    <!--<small>Preview</small>-->
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="/company">Company</a></li>
+    <li class="active">Edit</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <% if (Object.prototype.hasOwnProperty.call(flash, 'success')) { %>
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <%= flash.success %>
+    </div>
+  <% } %>
+  <% if (Object.prototype.hasOwnProperty.call(flash, 'error')) { %>
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <%= flash.error %>
+    </div>
+  <% } %>
+  <div class="box box-primary">
+    <form role="form" class="has-validation-callback" method="POST" action="">
+      <div class="box-header with-border">
+        <h3 class="box-title">Update Company</h3>
+
+        <!--<div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        </div>-->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group col-md-6">
+                    <label>Company Name</label><em>*</em>
+                    <input name="company_name" value="<%= data.data.company_name %>" id="company_name" class="form-control required" placeholder="Name" type="text" data-attr="language">
+                    <h5 class="text-danger" id="company_name_error"></h5>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Company Email</label><em>*</em>
+                    <input name="email" value="<%= data.data.email %>" id="email" class="form-control required" placeholder="Company Email" type="text" data-attr="language">
+                    <h5 class="text-danger" id="email_error"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group col-md-6">
+                    <label>Location</label><em>*</em>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <select name='country' id='country' class="form-control" onchange="changeCountry(this.value)">
+                                <option value=''>Select Country</option>
+                                <%
+                                for(var i=0; i<country.length; i++){
+                                %>
+                                    <option value="<%= country[i].name %>" <%= country[i].name==data.data.country? 'selected':'' %>><%= country[i].name %></option>
+                                <%
+                                } 
+                                %>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <select name='state' id='state' class="form-control" onchange="changeState(this.value, $('#country').val())">
+                                <option value=''>Select State</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <select name='city' id='city' class="form-control">
+                                <option value=''>Select City</option>
+                            </select>
+                        </div>
+                    </div>
+                    <h5 class="text-danger" id="location_error"></h5>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Contact Number</label><em>*</em>
+                    <input name="contact_no" value="<%= data.data.contact_no %>" id="contact_no" class="form-control required" placeholder="Contact Number" type="text" data-attr="language">
+                    <h5 class="text-danger" id="contact_no_error"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group col-md-12">
+                    <label>Address</label><em>*</em>
+                    <textarea name="address" id="address" class="form-control" rows="8"><%= data.data.address %></textarea>
+                    <h5 class="text-danger" id="address_error"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group col-md-6">
+                    <label>Website</label><em>*</em>
+                    <input name="website" value="<%= data.data.website %>" id="website" class="form-control required" placeholder="Website" type="text" data-attr="language">
+                    <h5 class="text-danger" id="website_error"></h5>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Status</label><em>*</em>
+                    <select class="form-control" id="status" name="status">
+                        <option value=''>Select Status</option>
+                        <option value='0' <%= data.data.status==0? 'selected':'' %> >Active</option>
+                        <option value='1' <%= data.data.status==1? 'selected':'' %> >Inactive</option>
+                    </select>
+                    <h5 class="text-danger" id="status_error"></h5>
+                </div>
+            </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <div class="box-footer">
+        <div class="pull-left">
+          <p class="text-success">
+          </p>
+        </div>
+        <div class="pull-right">
+          <a onclick="goBack();" class="btn btn-primary" role="button">Cancel</a>
+          <!-- <input name="submit" value="Submit" class="btn btn-primary" type="submit"> -->
+          <input value="Update" class="btn btn-primary" type="button" id="submitButton">
+        </div>
+      </div>
+      <!--<div class="box-footer">
+          Visit <a href="https://select2.github.io/">Select2 documentation</a> for more examples and information about
+          the plugin.
+      </div>-->
+    </form>
+  </div>
+  <!-- /.box -->
+</section>
+<script>
+    
+    
+</script>
+<!-- /.content -->

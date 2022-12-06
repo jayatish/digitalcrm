@@ -1,0 +1,129 @@
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section class="sidebar">
+    <ul class="sidebar-menu" data-widget="tree">
+      <li class="header">MAIN NAVIGATION</li>
+      <li class="<%= currentUrl.startsWith('/admin') ? 'active': '' %>">
+        <a href="/dashboard/"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+      </li>
+      <li class="treeview <%= currentUrl.startsWith('/company') ? 'active': '' %>">
+        <a href="#">
+          <i class="fas fa-hotel"></i> <span>Company</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li class="<%= currentUrl.startsWith('/company') ? 'active': '' %>"><a href="/company/"> <span>List</span></a></li>
+          <li class="<%= currentUrl.startsWith('/company/add') ? 'active': '' %>"><a href="/company/add"> <span>Add</span></a></li>
+        </ul>
+      </li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fas fa-users"></i> <span>Account Manager</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="/hotels/"> <span>List</span></a></li>
+          <li><a href="/hotels/"> <span>Add</span></a></li>
+        </ul>
+      </li>
+      <li class="<%= currentUrl.startsWith('/settings') ? 'active': '' %>">
+        <a href="/dashboard/"><i class="fas fa-cog"></i> <span>Global Settings</span></a>
+      </li>
+      <!-- <li class="treeview">
+        <a href="#">
+          <i class="fas fa-hotel"></i> <span>Accomodation</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="/hotels/"><i class="fas fa-hotel"></i> <span>List</span></a></li>
+          <li class="treeview">
+            <a href="#"><i class="fas fa-cog"></i> Settings
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/hotelType/"><i class="fas fa-h-square"></i> <span>Accomodation Type</span></a></li>
+              <li><a href="/roomType/"><i class="fas fa-person-booth"></i> <span>Space Type</span></a></li>
+
+
+              <li class="<%= currentUrl.startsWith('/icon') ? 'active': '' %>">
+                <a href="/icon/"><i class="fas fa-bed"></i> <span>Sleep Icon Settings</span></a>
+              </li>
+
+              <li class="<%= currentUrl.startsWith('/icon') ? 'active': '' %>">
+                <a href="/occupentsicon/"><i class="fas fa-bed"></i> <span>Occupants Settings</span></a>
+              </li>
+              <li class="<%= currentUrl.startsWith('/facilities/hotel') ? 'active': '' %>">
+                <a href="/facilities/hotel"><i class="fas fa-rss"></i> <span>Accomodation Facilities</span></a>
+              </li>
+              <li class="<%= currentUrl.startsWith('/facilities/room') ? 'active': '' %>">
+                <a href="/facilities/room"><i class="fas fa-rss"></i> <span>Space Facilities</span></a>
+              </li>
+
+              <li class="<%= currentUrl.startsWith('/bathroom') ? 'active': '' %>">
+                <a href="/bathroom/"><i class="fas fa-rss"></i> <span>Bathrooms</span></a>
+              </li>
+
+              <li class="<%= currentUrl.startsWith('/extrabed') ? 'active': '' %>">
+                <a href="/extrabed/"><i class="fas fa-rss"></i> <span>Extra Beds</span></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li> -->
+
+
+      <%
+        let VehicleActiveMenus = [
+        '/vehicles','/vehicles/rent-a-car','/vehicles/transfer'
+        ]
+
+        let isActive = !!+VehicleActiveMenus.filter(ele => currentUrl.startsWith(ele)).length
+      %>
+      <!-- <li class="treeview <%= isActive ? 'active': '' %>">
+        <a href="#">
+          <i class="fas fa-car"></i>
+          <span>Rent-A-Car</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li class="<%= currentUrl.startsWith('/vehicles/rent-a-car') ? 'active': '' %>">
+            <a href="/vehicles/rent-a-car"><i class="fas fa-car"></i> <span>Rent-A-Car</span></a>
+          </li>
+          <li class="<%= currentUrl.startsWith('/vehicles/transfer') ? 'active': '' %>">
+            <a href="/vehicles/transfer"><i class="fas fa-car"></i> <span>Transfer</span></a>
+          </li>
+          <li class="treeview">
+            <a href="#"><i class="fas fa-cog"></i> Settings
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li class="<%= currentUrl.startsWith('/carType') ? 'active': '' %>">
+                <a href="/carType/"><i class="fas fa-bus"></i> <span>Car Type</span></a>
+              </li>
+              <li class="<%= currentUrl.startsWith('/fuelType') ? 'active': '' %>">
+                <a href="/fuelType/"><i class="fas fa-gas-pump"></i> <span>Fuel Type</span></a>
+              </li>
+              <li class="<%= currentUrl.startsWith('/facilities/vehicle') ? 'active': '' %>">
+                <a href="/facilities/vehicle"><i class="fas fa-rss"></i> <span>Vehicle </span></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li> -->
+    </ul>
+  </section>
+  <!-- /.sidebar -->
+</aside>

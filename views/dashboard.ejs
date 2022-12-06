@@ -1,0 +1,60 @@
+<% layout('./layouts/main') -%>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Dashboard
+    <!-- <small>Version 1.0</small> -->
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fas fa-tachometer-alt"></i> Home</a></li>
+    <li class="active">Dashboard</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <!-- Info boxes -->
+  <div class="row">
+    <!-- /.col -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-aqua"><i class="fas fa-hotel"></i></span>
+  
+          <div class="info-box-content">
+            <span class="info-box-text">Company</span>
+            <span class="info-box-number"><%= company %></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-maroon"><i class="fas fa-users"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">Account Manager</span>
+          <span class="info-box-number"><%= account_manager %></span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+
+    <!-- fix for small devices only -->
+    <div class="clearfix visible-sm-block"></div>
+
+
+  </div>
+  <!-- /.row -->
+</section>
+<script>
+    document.addEventListener('DOMContentLoaded', e => {
+        if(!localStorage.getItem('userObj')) {
+            window.location.href = '/'
+        }
+    })
+</script>
+<!-- /.content -->
