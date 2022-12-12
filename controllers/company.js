@@ -9,10 +9,10 @@ class companyController {
     // Start function to render Listing page
     renderList(req, res, next) {
         _Company.read({}, 'list').then(result => {
-            console.log('result ==> ', result);
+            // console.log('result ==> ', result);
             res.render('company/list',  {
                 company: result.data,
-                flash: req.flash(),
+                flash: req.flash()
             });
         }).catch(error => {
             console.log('error section ==> ', error);

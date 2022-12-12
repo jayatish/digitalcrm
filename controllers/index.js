@@ -4,5 +4,6 @@ module.exports = {
     AUTH: require('./auth'),
     COMPANY: require('./company'),
     USER: require('./user'),
-    ADMINAUTH: require('./adminauth')
+    ADMINAUTH: require('./adminauth'),
+    ACCOUNTMANAGER: require('./accountManager')
 }
