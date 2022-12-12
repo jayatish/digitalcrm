@@ -19,7 +19,7 @@
           <li class="<%= currentUrl.startsWith('/company/add') ? 'active': '' %>"><a href="/company/add"> <span>Add</span></a></li>
         </ul>
       </li>
-      <li class="treeview">
+      <li class="treeview <%= currentUrl.startsWith('/accountManager') ? 'active': '' %>">
         <a href="#">
           <i class="fas fa-users"></i> <span>Account Manager</span>
           <span class="pull-right-container">
@@ -28,7 +28,7 @@
         </a>
         <ul class="treeview-menu">
           <li class="<%= currentUrl.startsWith('/accountManager') ? 'active': '' %>"><a href="/accountManager/"> <span>List</span></a></li>
-          <li><a href="/accountManager/add"> <span>Add</span></a></li>
+          <li class="<%= currentUrl.startsWith('/accountManager/add') ? 'active': '' %>"><a href="/accountManager/add"> <span>Add</span></a></li>
         </ul>
       </li>
       <li class="<%= currentUrl.startsWith('/settings') ? 'active': '' %>">
