@@ -92,6 +92,7 @@
                                                                     <th>Account Manager Name</th>
                                                                     <th>Email Id</th>
                                                                     <th>Number</th>
+                                                                    <th>Image</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                             </thead>
@@ -103,13 +104,16 @@
                                                                             <%= (i+1) %>
                                                                         </td>
                                                                         <td>
-                                                                            <%= accountManager[i].accountManager_name %>
+                                                                            <%= accountManager[i].accountmanager_name %>
                                                                         </td>
                                                                         <td>
                                                                             <%= accountManager[i].email %>
                                                                         </td>
                                                                         <td>
                                                                             <%= accountManager[i].contact_no %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <img src="<%= '/images/' + accountManager[i].image %>" width="100" height="100" />
                                                                         </td>
                                                                         <td class="text-center">
                                                                             <a href="<%= '/accountManager/edit/'+accountManager[i]._id %>"
@@ -130,6 +134,7 @@
                                                                     <th>Account Manager Name</th>
                                                                     <th>Email Id</th>
                                                                     <th>Number</th>
+                                                                    <th>Image</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                             </tfoot>

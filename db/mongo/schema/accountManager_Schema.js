@@ -3,18 +3,10 @@
 const mongoose = require('mongoose');
 const model = require('../../../configs').model;
 const ModelHelper = require('../../../helpers').modelHelper;
+const bcrypt = require('bcrypt');
 
 const accountManagerSchema = new mongoose.Schema({
     accountmanager_name: {
-        type: String
-    },
-    city: {
-        type: String
-    },
-    state: {
-        type: String
-    },
-    country: {
         type: String
     },
     email: {
@@ -23,36 +15,50 @@ const accountManagerSchema = new mongoose.Schema({
     contact_no: {
         type: String
     },
-    address: {
+    password: {
         type: String
     },
-    website: {
+    company_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: ModelHelper.getModelName(model.COMPANY)
+    },
+    image: {
         type: String
     },
     status: {
         type: Number,
         default: 0 // 0 = Active, 1 = Inactive
     },
-    // owner_id: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: ModelHelper.getModelName(model.OWNER)
-    // },
-    // name: {
-    //     type: String
-    // },
-    // description: {
-    //     type: String
-    // }
 }, { versionKey: false, timestamps: true });
 
-// companySchema.virtual('products', {
-//     ref: ModelHelper.getModelName(model.COLLECTION_PRODUCT),
-//     localField: '_id',
-//     foreignField: 'collection_id',
-//     justOne: false // set true for one-to-one relationship
-// });
+accountManagerSchema.pre('save', function (next) {
+    var accountManager = this;
 
-// companySchema.set('toJSON', { getters: true, virtuals: true })
-// companySchema.set('toObject', { getters: true, virtuals: true });
+    if (accountManager.isModified('password')) {
+        bcrypt.hash(accountManager.password, 12, function (err, hash) {
+            if (err) {
+                next(err);
+            } else {
+                accountManager.password = hash;
+                next();
+            }
+        })
+    } else {
+        next();
+    }
+});
+accountManagerSchema.methods.comparePassword = function (npassword) {
+    // return new Promise((resolve, reject) => {
+    return bcrypt.compareSync(npassword, this.password)
+    // })
+};
+accountManagerSchema.virtual('company', {
+    ref: ModelHelper.getModelName(model.COMPANY),
+    localField: 'company_id',
+    foreignField: '_id',
+    justOne: true // set true for one-to-one relationship
+});
+accountManagerSchema.set('toJSON', { getters: true, virtuals: true });
+accountManagerSchema.set('toObject', { getters: true, virtuals: true });
 
 module.exports = mongoose.model(ModelHelper.getModelName(model.ACCOUNTMANAGER), accountManagerSchema);

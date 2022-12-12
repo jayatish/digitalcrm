@@ -11,36 +11,7 @@
         $('#datepick').datepicker();
         $('#datepick1').datepicker();
     });
-
-
-    function changeCountry(val) {
-       $('#state').html("<option value=''>Select State</option>");
-       $('#city').html("<option value=''>Select City</option>");
-       $.post("https://countriesnow.space/api/v0.1/countries/states", {
-        country: val
-       }, function(data, status) {
-           let optionValue = "<option value=''>Select State</option>";
-           for(var i = 0; i < data.data.states.length; i++) {
-            optionValue += "<option value='"+data.data.states[i].name+"'>"+data.data.states[i].name+"</option>"
-           }
-           $('#state').html(optionValue);
-           console.log('OPtion value list ==> ', optionValue);
-       });
-    }
-
-    function changeState(state, country) {
-        $('#city').html("<option value=''>Select City</option>");
-        $.post("https://countriesnow.space/api/v0.1/countries/state/cities", {
-            state: state,
-            country: country
-       }, function(data, status) {
-           let optionValue = "<option value=''>Select City</option>";
-           for(var i = 0; i < data.data.length; i++) {
-            optionValue += "<option value='"+data.data[i]+"'>"+data.data[i]+"</option>"
-           }
-           $('#city').html(optionValue);
-       });
-    }
+    
 </script>
 `) %>
 
@@ -60,7 +31,7 @@
   </h1>
   <ol class="breadcrumb">
     <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="/accountManager">account Manager</a></li>
+    <li><a href="/accountManager">Account Manager</a></li>
     <li class="active">Add</li>
   </ol>
 </section>
@@ -80,9 +51,9 @@
     </div>
   <% } %>
   <div class="box box-primary">
-    <form role="form" class="has-validation-callback" method="POST" action="/accountManager/insertCompany">
+    <form role="form" class="has-validation-callback" method="POST" action="/accountManager/insertData" enctype="multipart/form-data">
       <div class="box-header with-border">
-        <h3 class="box-title">New accountManager</h3>
+        <h3 class="box-title">New Account Manager</h3>
 
         <!--<div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -95,78 +66,58 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group col-md-6">
-                    <label>Company Name</label><em>*</em>
-                    <input name="company_name" value="" id="company_name" class="form-control required" placeholder="Name" type="text" data-attr="language">
-                    <h5 class="text-danger" id="company_name_error"></h5>
+                    <label>Account Manager Name</label><em>*</em>
+                    <input name="accountmanager_name" value="" id="accountmanager_name" class="form-control required" placeholder="Account Manager Name" type="text" data-attr="language">
+                    <h5 class="text-danger" id="accountmanager_name_error"></h5>
                 </div>
                 <div class="form-group col-md-6">
-                    <label>Company Email</label><em>*</em>
-                    <input name="email" value="" id="email" class="form-control required" placeholder="Company Email" type="text" data-attr="language">
+                    <label>Email</label><em>*</em>
+                    <input name="email" value="" id="email" class="form-control required" placeholder="Email" type="text" data-attr="language">
                     <h5 class="text-danger" id="email_error"></h5>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group col-md-6">
-                    <label>Location</label><em>*</em>
-                    <div class="row">
-                        <div class="form-group col-md-4">
-                            <select name='country' id='country' class="form-control" onchange="changeCountry(this.value)">
-                                <option value=''>Select Country</option>
-                                <%
-                                for(var i=0; i<country.length; i++){
-                                %>
-                                    <option value="<%= country[i].name %>"><%= country[i].name %></option>
-                                <%
-                                } 
-                                %>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <select name='state' id='state' class="form-control" onchange="changeState(this.value, $('#country').val())">
-                                <option value=''>Select State</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <select name='city' id='city' class="form-control">
-                                <option value=''>Select City</option>
-                            </select>
-                        </div>
-                    </div>
-                    <h5 class="text-danger" id="location_error"></h5>
-                </div>
+                
                 <div class="form-group col-md-6">
                     <label>Contact Number</label><em>*</em>
                     <input name="contact_no" value="" id="contact_no" class="form-control required" placeholder="Contact Number" type="text" data-attr="language">
                     <h5 class="text-danger" id="contact_no_error"></h5>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group col-md-12">
-                    <label>Address</label><em>*</em>
-                    <textarea name="address" id="address" class="form-control" rows="8"></textarea>
-                    <h5 class="text-danger" id="address_error"></h5>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
                 <div class="form-group col-md-6">
-                    <label>Website</label><em>*</em>
-                    <input name="website" value="" id="website" class="form-control required" placeholder="Website" type="text" data-attr="language">
-                    <h5 class="text-danger" id="website_error"></h5>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Status</label><em>*</em>
-                    <select class="form-control" id="status" name="status">
-                        <option value=''>Select Status</option>
-                        <option value='0'>Active</option>
-                        <option value='1'>Inactive</option>
+                  <label>Company</label><em>*</em>
+                  <div class="form-group">
+                    <select name='company_id' id='company_id' class="form-control required">
+                        <option value=''>Select Company</option>
+                        <%
+                        for(var i=0; i<company.length; i++){
+                        %>
+                          <option value="<%= company[i]._id %>"><%= company[i].company_name %></option>
+                        <%
+                        } 
+                        %>
                     </select>
-                    <h5 class="text-danger" id="status_error"></h5>
+                    <h5 class="text-danger" id="company_id_error"></h5>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group col-md-6">
+                    <label>Profile Image</label><em>*</em>
+                    <input id="image" name="image" type="file" class="form-control" accept="image/*" />
+                    <h5 class="text-danger" id="image_error"></h5>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Status</label><em>*</em>
+                  <select class="form-control required" id="status" name="status">
+                      <option value=''>Select Status</option>
+                      <option value='0'>Active</option>
+                      <option value='1'>Inactive</option>
+                  </select>
+                  <h5 class="text-danger" id="status_error"></h5>
                 </div>
             </div>
         </div>
