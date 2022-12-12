@@ -27,8 +27,8 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="/hotels/"> <span>List</span></a></li>
-          <li><a href="/hotels/"> <span>Add</span></a></li>
+          <li class="<%= currentUrl.startsWith('/accountManager') ? 'active': '' %>"><a href="/accountManager/"> <span>List</span></a></li>
+          <li><a href="/accountManager/add"> <span>Add</span></a></li>
         </ul>
       </li>
       <li class="<%= currentUrl.startsWith('/settings') ? 'active': '' %>">

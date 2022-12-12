@@ -7,7 +7,8 @@ const routes = {
     USER: require('./user'),
     LOGIN: require('./login'),
     DASHBOARD: require('./dashboard'),
-    COMPANY: require('./company')
+    COMPANY: require('./company'),
+    ACCOUNTMANAGER: require('./accountManager')
 };
 
 module.exports = {
@@ -21,6 +22,7 @@ module.exports = {
             // .use('/', routes.USER)
             .use('/dashboard', routes.DASHBOARD)
             .use('/company', routes.COMPANY)
+            .use('/accountManager', routes.ACCOUNTMANAGER)
             .use(routes.LOGIN)
             
         app.use('*', auth.isAuthenticated, (req, res, next) => {

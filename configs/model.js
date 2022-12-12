@@ -9,6 +9,10 @@ module.exports = {
         name: "company",
         description: "Sample Company details"
     },
+    ACCOUNTMANAGER: {
+        name: "accountmanager",
+        description: "Sample Account manager details"
+    },
     OWNER: {
         name: "owner",
         description: "This is owner listings"
