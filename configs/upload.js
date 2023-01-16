@@ -5,6 +5,7 @@ const baseUplodFolder = '/uploads/images/';
 
 var config = {
     accountManager: appRoot + baseUplodFolder + 'accountManager/',
+    company: appRoot + baseUplodFolder + 'company/',
 };
 
 

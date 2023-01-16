@@ -12,13 +12,11 @@ class accountManagerController {
     // Start function to render Listing page
     renderList(req, res, next) {
         _AccountManager.read({}, 'list').then(result => {
-            console.log('result ==> ', result);
             res.render('accountManager/list',  {
                 accountManager: result.data,
                 flash: req.flash(),
             });
         }).catch(error => {
-            console.log('error section ==> ', error);
            res.redirect('/dashboard');
         })
     }
@@ -27,7 +25,6 @@ class accountManagerController {
     // Start function to render the Add Page
     renderAddPage(req, res, next) {
         _Company.read({status: 0}, 'many').then(response => {
-            console.log('response ==> ', response);
             res.render('accountManager/add', {
                 company: response,
                 flash: req.flash(),
@@ -46,7 +43,6 @@ class accountManagerController {
             ["image/jpeg", "image/jpg", "image/png"]
         )(req, res, (err) => {
             if (err) {
-                console.log("error")
                 res.send('Error to upload')
             } else {
                 var images = (req.files.image || [])
@@ -72,14 +68,12 @@ class accountManagerController {
 
     // Start function to render edit page
     renderEditPage(req, res, next) {
-        console.log('params ==> ', req.params);
         Promise.all([
             _Company.read({status: 0}, 'many'),
             _AccountManager.read({
                 _id: req.params.id
             }, 'single')
         ]).then(([company,account_manager]) => {
-            console.log('account_manager ==> ', account_manager);
             res.render('accountManager/edit', {
                 data: account_manager,
                 company: company,
@@ -100,7 +94,6 @@ class accountManagerController {
             ["image/jpeg", "image/jpg", "image/png"]
         )(req, res, (err) => {
             if (err) {
-                console.log("error")
                 res.send('Error to upload')
             } else {
                 var images = (req.files.image || [])
@@ -118,7 +111,7 @@ class accountManagerController {
                 _AccountManager.update(payloadObj, {
                     _id: req.params.id
                 }).then(response => {
-                    if(imageString !== '' && req.body.exist_image!=='') {
+                    if(imageString != '' && req.body.exist_image!='') {
                         fs.unlinkSync(uploadConfig.accountManager + req.body.exist_image);
                     }
                     req.flash('success', response.msg);
@@ -135,53 +128,27 @@ class accountManagerController {
     
 
     // Start function to delete the client
-    deleteClient(req, res, next) {
-        if (!req.body.client_id || req.body.client_id === '') {
-            res.message = "Parameters missing";
-            next();
-        } else {
-            var accessTokenClause = {
-                token_list: {
-                    $elemMatch: {
-                        access_token: req.headers.auth_token
-                    }
+    deleteAccountManager(req, res, next) {
+        _AccountManager.read({
+            _id: req.params.id
+        }, 'single').then(result => {
+            let imageURL = result.data.image;
+            _AccountManager.delete({
+                _id: req.params.id
+            }, 'single').then(deleteResponse => {
+                if(imageURL) {
+                    fs.unlinkSync(uploadConfig.accountManager + imageURL);
                 }
-            }
-
-            _Owner.read(accessTokenClause)
-                .then(userDetails => {
-                    var searchClientObj = {
-                        _id: req.body.client_id
-                    }
-
-                    _Client.delete(searchClientObj, 'single')
-                        .then(clientObj => {
-                            var client_customized_field = {
-                                client_id: req.body.client_id
-                            }
-
-                            _Client_customized_field.delete(client_customized_field, 'many')
-                                .then(clientCustomizedFieldObj => {
-                                    return res.json({
-                                        'status': 1,
-                                        'message': 'Client Deleted successfully.',
-                                    })
-                                })
-                                .catch(clientCustomizedFieldError => {
-                                    res.message = clientCustomizedFieldError.msg;
-                                    next();
-                                })
-                        })
-                        .catch(clientError => {
-                            res.message = clientError.msg;
-                            next();
-                        })
-                })
-                .catch(userError => {
-                    res.message = userError.msg;
-                    next();
-                })
-        }
+                req.flash('success', deleteResponse.msg);
+                res.redirect('/accountManager');
+            }).catch(deleteError => {
+                req.flash('error', deleteError.msg);
+                res.redirect('/accountManager');
+            })
+        }).catch(error => {
+            req.flash('error', error.msg);
+            res.redirect('/accountManager');
+        });
     }
     // End function to delete the client
 }

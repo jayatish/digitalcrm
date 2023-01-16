@@ -6,7 +6,7 @@ const development = {
   db: "crm",
   chatHost: "mongodb://localhost:27017/",
   limit: 50,
-  // dbUri: 'mongodb://travelportal:travelportal@cluster0-shard-00-00-d2ofr.mongodb.net:27017,cluster0-shard-00-01-d2ofr.mongodb.net:27017,cluster0-shard-00-02-d2ofr.mongodb.net:27017/travelportal?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin'
+  dbUri: 'mongodb+srv://jayatish:Passion@12345@cluster0.g73h9r2.mongodb.net/crm?retryWrites=true&w=majority'
   
 };
 

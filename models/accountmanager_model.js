@@ -52,14 +52,17 @@ class AccountManagagerModel {
     delete(whereCluase, type = 'many') {
         return new Promise((resolve, reject) => {
             if (type == 'single') {
-                _Client.deleteOne(whereCluase).exec((err, response) => {
+                _AccountManager.deleteOne(whereCluase).exec((err, response) => {
                     if (err) {
                         return reject({
                             status: 400,
                             msg: 'Database error'
                         });
                     } else {
-                        return resolve();
+                        return resolve({
+                            status: true,
+                            msg: "Data deleted successfully"
+                        });
                     }
                 })
             } if (type == 'many') {
@@ -128,10 +131,11 @@ class AccountManagagerModel {
     read(whereClause, type = 'single') {
         return new Promise((resolve, reject) => {
             if(type == 'single') {
-                _AccountManager.findOne(whereClause).exec((err, result) => {
+                _AccountManager.findOne(whereClause).populate('company').exec((err, result) => {
                     if(err) {
                         return reject(err);
                     } else {
+                        console.log('result ==> ', result);
                         return resolve({
                             status: true,
                             data: result
@@ -150,13 +154,14 @@ class AccountManagagerModel {
                     }
                 })
             } if(type == 'list') {
-                _AccountManager.find({}).exec((err, result) => {
+                _AccountManager.find({}).populate('company').exec((err, result) => {
                     if(err) {
                         return reject({
                             status: false,
                             message: "Database error"
                         })
                     } else {
+                        console.log('result ==> ', result);
                         return resolve({
                             status: true,
                             data: result
