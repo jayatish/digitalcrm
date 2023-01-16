@@ -80,7 +80,7 @@
     </div>
   <% } %>
   <div class="box box-primary">
-    <form role="form" class="has-validation-callback" method="POST" action="/company/insertCompany">
+    <form role="form" class="has-validation-callback" method="POST" action="/company/insertCompany" enctype="multipart/form-data">
       <div class="box-header with-border">
         <h3 class="box-title">New Company</h3>
 
@@ -154,12 +154,17 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
+                    <label>Company Image</label><em>*</em>
+                    <input id="image" name="image" type="file" class="form-control" accept="image/*" />
+                    <h5 class="text-danger" id="image_error"></h5>
+                </div>
+                <div class="form-group col-md-4">
                     <label>Website</label><em>*</em>
                     <input name="website" value="" id="website" class="form-control required" placeholder="Website" type="text" data-attr="language">
                     <h5 class="text-danger" id="website_error"></h5>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label>Status</label><em>*</em>
                     <select class="form-control" id="status" name="status">
                         <option value=''>Select Status</option>

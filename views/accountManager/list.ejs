@@ -92,6 +92,7 @@
                                                                     <th>Account Manager Name</th>
                                                                     <th>Email Id</th>
                                                                     <th>Number</th>
+                                                                    <th>Company</th>
                                                                     <th>Image</th>
                                                                     <th>Action</th>
                                                                 </tr>
@@ -111,6 +112,9 @@
                                                                         </td>
                                                                         <td>
                                                                             <%= accountManager[i].contact_no %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= accountManager[i].company.company_name %>
                                                                         </td>
                                                                         <td>
                                                                             <img src="<%= '/images/' + accountManager[i].image %>" width="100" height="100" />

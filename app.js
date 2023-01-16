@@ -23,6 +23,7 @@ logger.info("Database Connecting ...........");
 module.exports.exposeServer = () => server;
 
 db.connect(configs.mongo.host+configs.mongo.db)
+// db.connect(configs.mongo.dbUri)
     .then(() => {
         return middlewares(app);
     })

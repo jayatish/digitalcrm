@@ -14,4 +14,5 @@ router.get('/add', company.renderAddPage);
 router.post('/insertCompany', company.insertCompany);
 router.get('/edit/:id', company.renderEditPage);
 router.post('/edit/:id', company.updateCompany);
+router.get('/delete/:id', company.deleteCompany);
 module.exports = router;
