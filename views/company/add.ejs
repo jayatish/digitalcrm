@@ -12,10 +12,26 @@
         $('#datepick1').datepicker();
     });
 
+    function showLoaderState() {
+      $('#loader').show();
+    }
+
+    function hideLoaderState() {
+      $('#loader').hide();
+    }
+
+    function showLoaderCity() {
+      $('#load').show();
+    }
+
+    function hideLoaderCity() {
+      $('#load').hide();
+    }
 
     function changeCountry(val) {
        $('#state').html("<option value=''>Select State</option>");
        $('#city').html("<option value=''>Select City</option>");
+       showLoaderState()
        $.post("https://countriesnow.space/api/v0.1/countries/states", {
         country: val
        }, function(data, status) {
@@ -24,12 +40,14 @@
             optionValue += "<option value='"+data.data.states[i].name+"'>"+data.data.states[i].name+"</option>"
            }
            $('#state').html(optionValue);
+           hideLoaderState()
            console.log('OPtion value list ==> ', optionValue);
        });
     }
 
     function changeState(state, country) {
         $('#city').html("<option value=''>Select City</option>");
+        showLoaderCity()
         $.post("https://countriesnow.space/api/v0.1/countries/state/cities", {
             state: state,
             country: country
@@ -39,6 +57,7 @@
             optionValue += "<option value='"+data.data[i]+"'>"+data.data[i]+"</option>"
            }
            $('#city').html(optionValue);
+           hideLoaderCity()
        });
     }
 </script>
@@ -48,7 +67,23 @@
 <style type="text/css">
   em{
     color: red
-  }
+  },
+  .spinner {
+/* border: 16px solid #f3f3f3;
+border-radius: 50%;
+border-top: 16px solid #3498db;
+width: 120px;
+height: 120px;
+-webkit-animation: spin 2s linear infinite; 
+animation: spin 2s linear infinite; */
+display: none
+}
+
+
+@-webkit-keyframes spin {
+0% { -webkit-transform: rotate(0deg); }
+100% { -webkit-transform: rotate(360deg); }
+}
 </style>
 `) %>
 
@@ -127,11 +162,13 @@
                             <select name='state' id='state' class="form-control" onchange="changeState(this.value, $('#country').val())">
                                 <option value=''>Select State</option>
                             </select>
+                            <div class="spinner" id='loader' style="display: none;">Loading...</div>
                         </div>
                         <div class="form-group col-md-4">
                             <select name='city' id='city' class="form-control">
                                 <option value=''>Select City</option>
                             </select>
+                            <div class="spinner" id='load' style="display: none;">Loading...</div>
                         </div>
                     </div>
                     <h5 class="text-danger" id="location_error"></h5>
