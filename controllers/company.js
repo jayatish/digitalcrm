@@ -15,7 +15,7 @@ class companyController {
     renderList(req, res, next) {
         _Company.read({}, 'list').then(result => {
             // console.log('result ==> ', result);
-            res.render('company/list',  {
+            res.render('company/list', {
                 company: result.data,
                 flash: req.flash()
             });
@@ -33,10 +33,10 @@ class companyController {
                 let dataJson = JSON.parse(chunk);
                 dataJson.data.sort(function (a, b) {
                     if (a.name < b.name) {
-                      return -1;
+                        return -1;
                     }
                     if (a.name > b.name) {
-                      return 1;
+                        return 1;
                     }
                     return 0;
                 })
@@ -45,7 +45,7 @@ class companyController {
                     flash: req.flash(),
                 });
             })
-            .on('error', function(error) {
+            .on('error', function (error) {
                 console.log('error ==> ', error);
             })
     }
@@ -53,6 +53,15 @@ class companyController {
 
     // Start function to insert data
     insertCompany(req, res, next) {
+        //Company name slugify start to spinal case
+        function slugify(slugName) {
+            let slug = slugName.toLowerCase()
+                .split(/\s+|W+/)
+                .filter((word) => word.trim() !== "")
+                .join("-")
+            return slug;
+        }
+        //completed slugify
         console.log('req.body ==> ', req.body);
         // res.send("Insert data");
         // res.send("Insert company details");
@@ -73,10 +82,15 @@ class companyController {
                 let imageString = (images.length) ? images[0] : '';
                 let payloadObj = req.body;
                 payloadObj.image = imageString;
+                payloadObj.slug = slugify(payloadObj.company_name)
+                console.log("Company All Dtata Insert =======>>>", JSON.stringify(payloadObj));
+
+                console.log("Company Name =======>>>", (slugify(payloadObj.company_name)));
+
                 _Company.check_existance({
                     email: req.body.email
                 }).then(response => {
-                    if(response.status) {
+                    if (response.status) {
                         _Company.add(payloadObj).then(response => {
                             console.log('response ==> ', response);
                             // res.send('Hello data');
@@ -97,10 +111,10 @@ class companyController {
                     req.flash('error', error.msg);
                     res.redirect('/company/add');
                 })
-                
+
             }
         });
-        
+
     }
     // End function to insert data
 
@@ -111,10 +125,10 @@ class companyController {
                 let dataJson = JSON.parse(chunk);
                 dataJson.data.sort(function (a, b) {
                     if (a.name < b.name) {
-                      return -1;
+                        return -1;
                     }
                     if (a.name > b.name) {
-                      return 1;
+                        return 1;
                     }
                     return 0;
                 });
@@ -127,18 +141,18 @@ class companyController {
                         country: dataJson.data,
                         flash: req.flash(),
                     });
-                    
+
                 }).catch(error => {
                     console.log('error ==> ', error);
                     res.send('This is error page');
                 })
             })
-            .on('error', function(error) {
+            .on('error', function (error) {
                 console.log('error ==> ', error);
             });
-        
-        
-        
+
+
+
     }
     // End function to render edit page
 
@@ -161,7 +175,7 @@ class companyController {
                 let imageString = (images.length) ? images[0] : '';
 
                 let payloadObj = req.body;
-                if(imageString !== '') {
+                if (imageString !== '') {
                     payloadObj.image = imageString;
                 }
 
@@ -169,11 +183,11 @@ class companyController {
 
 
                 _Company.check_existance({ _id: { $ne: mongoose.Types.ObjectId(req.params.id) }, email: payloadObj.email }).then(response => {
-                    if(response.status) {
+                    if (response.status) {
                         _Company.update(payloadObj, {
                             _id: req.params.id
                         }).then(response => {
-                            if(imageString !== '' && req.body.exist_image!=='') {
+                            if (imageString !== '' && req.body.exist_image !== '') {
                                 fs.unlinkSync(uploadConfig.company + req.body.exist_image);
                             }
                             req.flash('success', response.msg);
@@ -183,7 +197,7 @@ class companyController {
                             res.redirect('/company/edit/' + req.params.id);
                         });
                     } else {
-                        if(payloadObj.image) {
+                        if (payloadObj.image) {
                             fs.unlinkSync(uploadConfig.company + payloadObj.image);
                         }
                         req.flash('error', response.msg);
@@ -193,7 +207,7 @@ class companyController {
                     req.flash('error', error.msg);
                     res.redirect('/company/edit/' + req.params.id);
                 })
-                
+
             }
         });
         // _Company.update(req.body, {
@@ -218,7 +232,7 @@ class companyController {
             _id: mongoose.Types.ObjectId(req.params.id)
         }
         _Company.delete(whereClause, 'single').then(result => {
-            if(result.status) {
+            if (result.status) {
                 req.flash('success', result.msg);
             } else {
                 req.flash('error', result.msg);
@@ -235,7 +249,7 @@ class companyController {
 
     // Start function to get the client list
     clientList(req, res, next) {
-        if(!req.body.page_number || req.body.page_number==='' || !req.body.page_count || req.body.page_count==='') {
+        if (!req.body.page_number || req.body.page_number === '' || !req.body.page_count || req.body.page_count === '') {
             res.message = "Parameters missing";
             next()
         } else {
@@ -254,8 +268,8 @@ class companyController {
                     _Client.read(clientWhereClause, 'many')
                         .then(allClientResponse => {
                             var totalCount = allClientResponse.length;
-                            var pageNumber = Math.ceil(totalCount/req.body.page_count);
-                            var skip = (req.body.page_number*req.body.page_count)-req.body.page_count;
+                            var pageNumber = Math.ceil(totalCount / req.body.page_count);
+                            var skip = (req.body.page_number * req.body.page_count) - req.body.page_count;
                             var clientListWhereClause = {
                                 owner_id: ownerResponse._id,
                                 skip: skip,
@@ -265,18 +279,18 @@ class companyController {
                             _Client.read(clientListWhereClause, 'list')
                                 .then(clientListResponse => {
                                     var dataObj = [];
-                                    if(clientListResponse.length) {
+                                    if (clientListResponse.length) {
                                         clientListResponse.map((clientData) => {
                                             var clientName = [];
-                                            if(clientData.first_name!=='') {
+                                            if (clientData.first_name !== '') {
                                                 clientName.push(clientData.first_name)
-                                            } if(clientData.last_name!=='') {
+                                            } if (clientData.last_name !== '') {
                                                 clientName.push(clientData.last_name)
                                             }
                                             dataObj.push({
                                                 client_name: clientName.join(' '),
                                                 client_id: clientData._id,
-                                                company_name: (clientData.company_name)?clientData.company_name:''
+                                                company_name: (clientData.company_name) ? clientData.company_name : ''
                                             })
                                         })
                                     }
@@ -312,7 +326,7 @@ class companyController {
 
     // Start function to add client
     addClient(req, res, next) {
-        if(!req.body.email || req.body.email==='') {
+        if (!req.body.email || req.body.email === '') {
             res.message = "Parameters missing";
             next();
         } else {
@@ -380,7 +394,7 @@ class companyController {
 
     // Start function to get the client details
     clientDetail(req, res, next) {
-        if(!req.body.client_id || req.body.client_id==='') {
+        if (!req.body.client_id || req.body.client_id === '') {
             res.message = "Parameters missing";
             next();
         } else {
@@ -409,41 +423,41 @@ class companyController {
                                 contact_details: []
                             };
                             var otherDetails = [];
-                            if(clientObj.first_name!=='' || clientObj.last_name!=='') {
+                            if (clientObj.first_name !== '' || clientObj.last_name !== '') {
                                 var nameArray = [];
-                                if(clientObj.first_name!=='') {
+                                if (clientObj.first_name !== '') {
                                     nameArray.push(clientObj.first_name);
-                                } if(clientObj.last_name!=='') {
+                                } if (clientObj.last_name !== '') {
                                     nameArray.push(clientObj.last_name);
                                 }
                                 otherDetails.push({
                                     'field_name': 'Sales Representative',
                                     'value': nameArray.join(' ')
                                 })
-                            } if(clientObj.email!=='') {
+                            } if (clientObj.email !== '') {
                                 otherDetails.push({
                                     'field_name': 'Email',
                                     'value': clientObj.email
                                 })
-                            } if(clientObj.phone!=='') {
+                            } if (clientObj.phone !== '') {
                                 otherDetails.push({
                                     'field_name': 'Phone',
                                     'value': clientObj.phone
                                 })
-                            } if(clientObj.website!=='') {
+                            } if (clientObj.website !== '') {
                                 otherDetails.push({
                                     'field_name': 'Website',
                                     'value': clientObj.website
                                 })
-                            } if(clientObj.address!=='' || clientObj.city!=='' || clientObj.state!=='' || clientObj.zip!=='') {
+                            } if (clientObj.address !== '' || clientObj.city !== '' || clientObj.state !== '' || clientObj.zip !== '') {
                                 var addressArray = [];
-                                if(clientObj.address!=='') {
+                                if (clientObj.address !== '') {
                                     addressArray.push(clientObj.address);
-                                } if(clientObj.city!=='') {
+                                } if (clientObj.city !== '') {
                                     addressArray.push(clientObj.city);
-                                } if(clientObj.state!=='') {
+                                } if (clientObj.state !== '') {
                                     addressArray.push(clientObj.state);
-                                }if(clientObj.zip!=='') {
+                                } if (clientObj.zip !== '') {
                                     addressArray.push(clientObj.zip);
                                 }
                                 otherDetails.push({
@@ -457,7 +471,7 @@ class companyController {
                             clientData.contact_details = otherDetails;
                             _Client_customized_field.read(client_customized_field, 'many')
                                 .then(clientCustomizedFieldObj => {
-                                    if(clientCustomizedFieldObj.length) {
+                                    if (clientCustomizedFieldObj.length) {
                                         clientCustomizedFieldObj.map(clientCustomizedValue => {
                                             clientData.contact_details.push({
                                                 'field_name': clientCustomizedValue.field_name,
