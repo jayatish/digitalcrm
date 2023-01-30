@@ -1,0 +1,145 @@
+<% layout('../layouts/main') -%>
+<% script('/js/form-validation/region.js') -%>
+
+<% block('custom_scripts', `
+<script>
+  function goBack() {
+    window.history.back();
+  }
+    
+</script>
+`) %>
+
+<% block('custom_style', `
+<style type="text/css">
+  em{
+    color: red
+  }
+</style>
+`) %>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Edit Account Manager
+    <!--<small>Preview</small>-->
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="/accountManager">Account Manager</a></li>
+    <li class="active">Edit</li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <% if (Object.prototype.hasOwnProperty.call(flash, 'success')) { %>
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <%= flash.success %>
+    </div>
+  <% } %>
+  <% if (Object.prototype.hasOwnProperty.call(flash, 'error')) { %>
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <%= flash.error %>
+    </div>
+  <% } %>
+  <div class="box box-primary">
+    <form role="form" class="has-validation-callback" method="POST" action="" enctype="multipart/form-data">
+        <input name="exist_image" value="<%= data.data.image %>" id="exist_image" type="hidden">
+      <div class="box-header with-border">
+        <h3 class="box-title">Update Account Manager</h3>
+
+        <!--<div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        </div>-->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group col-md-6">
+                    <label>Account Manager Name</label><em>*</em>
+                    <input name="accountmanager_name" value="<%= data.data.accountmanager_name %>" id="accountmanager_name" class="form-control required" placeholder="Account Manager Name" type="text" data-attr="language">
+                    <h5 class="text-danger" id="accountmanager_name_error"></h5>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Email</label><em>*</em>
+                    <input name="email" value="<%= data.data.email %>" id="email" class="form-control required" placeholder="Email" type="text" data-attr="language">
+                    <h5 class="text-danger" id="email_error"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                
+                <div class="form-group col-md-6">
+                    <label>Contact Number</label><em>*</em>
+                    <input name="contact_no" value="<%= data.data.contact_no %>" id="contact_no" class="form-control required" placeholder="Contact Number" type="text" data-attr="language">
+                    <h5 class="text-danger" id="contact_no_error"></h5>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Company</label><em>*</em>
+                  <div class="form-group">
+                    <select name='company_id' id='company_id' class="form-control required">
+                        <option value=''>Select Company</option>
+                        <%
+                        for(var i=0; i<company.length; i++){
+                            let selected='';
+                            if(data.data.company_id.toString() == company[i]._id.toString()) {
+                                selected = 'selected';
+                            }
+                        %>
+                          <option value="<%= company[i]._id %>" <%= selected %> ><%= company[i].company_name %></option>
+                        <%
+                        } 
+                        %>
+                    </select>
+                    <h5 class="text-danger" id="company_id_error"></h5>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group col-md-4">
+                    <label>Existing Image</label>
+                    <img src="<%= '/images/' + data.data.image %>" class="img-responsive" width="500" height="500" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Profile Image</label>
+                    <input id="image" name="image" type="file" class="form-control" accept="image/*" />
+                    <h5 class="text-danger" id="image_error"></h5>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Status</label><em>*</em>
+                  <select class="form-control required" id="status" name="status">
+                      <option value=''>Select Status</option>
+                      <option value='0' <%= data.data.status==0? 'selected':'' %>>Active</option>
+                      <option value='1' <%= data.data.status==1? 'selected':'' %>>Inactive</option>
+                  </select>
+                  <h5 class="text-danger" id="status_error"></h5>
+                </div>
+            </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <div class="box-footer">
+        <div class="pull-left">
+          <p class="text-success">
+          </p>
+        </div>
+        <div class="pull-right">
+          <a onclick="goBack();" class="btn btn-primary" role="button">Cancel</a>
+          <!-- <input name="submit" value="Submit" class="btn btn-primary" type="submit"> -->
+          <input value="Submit" class="btn btn-primary" type="button" id="submitButton">
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- /.box -->
+</section>
+<!-- /.content -->

@@ -1,7 +1,12 @@
 const _Company = require('../models').COMPANY;
 const async = require("async");
 const requests = require('requests');
-const axios = require('axios')
+const axios = require('axios');
+
+const uploader = require('../middlewares/fileUploader');
+const uploadConfig = require('../configs/upload');
+const mongoose = require('mongoose');
+const fs = require('fs');
 
 class companyController {
     constructor() { }
@@ -9,10 +14,10 @@ class companyController {
     // Start function to render Listing page
     renderList(req, res, next) {
         _Company.read({}, 'list').then(result => {
-            console.log('result ==> ', result);
+            // console.log('result ==> ', result);
             res.render('company/list',  {
                 company: result.data,
-                flash: req.flash(),
+                flash: req.flash()
             });
         }).catch(error => {
             console.log('error section ==> ', error);
@@ -48,26 +53,59 @@ class companyController {
 
     // Start function to insert data
     insertCompany(req, res, next) {
-        // console.log('req.body ==> ', req.body);
+        console.log('req.body ==> ', req.body);
         // res.send("Insert data");
         // res.send("Insert company details");
-        _Company.add(req.body).then(response => {
-            console.log('response ==> ', response);
-            // res.send('Hello data');
-            req.flash('success', response.msg);
-            res.redirect('/company');
-        }).catch(error => {
-            console.log('error ==> ', error);
-            // res.send('Hello world');
-            req.flash('error', response.msg);
-            res.redirect('/company/add');
-        })
+        uploader.uploadFiles(
+            [{ name: 'image', maxCount: 1 }],
+            uploadConfig.company,
+            ["image/jpeg", "image/jpg", "image/png"]
+        )(req, res, (err) => {
+            if (err) {
+                console.log("error")
+                res.send('Error to upload')
+            } else {
+                var images = (req.files.image || [])
+                    .reduce((a, b) => {
+                        return b.filename ? a.concat(b.filename) : a;
+                    }, []);
+
+                let imageString = (images.length) ? images[0] : '';
+                let payloadObj = req.body;
+                payloadObj.image = imageString;
+                _Company.check_existance({
+                    email: req.body.email
+                }).then(response => {
+                    if(response.status) {
+                        _Company.add(payloadObj).then(response => {
+                            console.log('response ==> ', response);
+                            // res.send('Hello data');
+                            req.flash('success', response.msg);
+                            res.redirect('/company');
+                        }).catch(error => {
+                            console.log('error ==> ', error);
+                            // res.send('Hello world');
+                            req.flash('error', response.msg);
+                            res.redirect('/company/add');
+                        })
+                    } else {
+                        fs.unlinkSync(uploadConfig.company + payloadObj.image);
+                        req.flash('error', response.msg);
+                        res.redirect('/company/add');
+                    }
+                }).catch(error => {
+                    req.flash('error', error.msg);
+                    res.redirect('/company/add');
+                })
+                
+            }
+        });
+        
     }
     // End function to insert data
 
     // Start function to render edit page
     renderEditPage(req, res, next) {
-        console.log('params ==> ', req.params);
         requests('https://countriesnow.space/api/v0.1/countries/currency', { streaming: true })
             .on('data', function (chunk) {
                 let dataJson = JSON.parse(chunk);
@@ -106,22 +144,94 @@ class companyController {
 
     // Start function to update the company
     updateCompany(req, res, next) {
-        console.log('req.body ==> ', req.body);
-        _Company.update(req.body, {
-            _id: req.params.id
-        }).then(response => {
-            console.log('response ==> ', response);
-            // res.send('Hello data');
-            req.flash('success', response.msg);
-            res.redirect('/company');
-        }).catch(error => {
-            console.log('error ==> ', error);
-            // res.send('Hello world');
-            req.flash('error', response.msg);
-            res.redirect('/company/add');
-        })
+        uploader.uploadFiles(
+            [{ name: 'image', maxCount: 1 }],
+            uploadConfig.company,
+            ["image/jpeg", "image/jpg", "image/png"]
+        )(req, res, (err) => {
+            if (err) {
+                console.log("error")
+                res.send('Error to upload')
+            } else {
+                var images = (req.files.image || [])
+                    .reduce((a, b) => {
+                        return b.filename ? a.concat(b.filename) : a;
+                    }, []);
+
+                let imageString = (images.length) ? images[0] : '';
+
+                let payloadObj = req.body;
+                if(imageString !== '') {
+                    payloadObj.image = imageString;
+                }
+
+
+
+
+                _Company.check_existance({ _id: { $ne: mongoose.Types.ObjectId(req.params.id) }, email: payloadObj.email }).then(response => {
+                    if(response.status) {
+                        _Company.update(payloadObj, {
+                            _id: req.params.id
+                        }).then(response => {
+                            if(imageString !== '' && req.body.exist_image!=='') {
+                                fs.unlinkSync(uploadConfig.company + req.body.exist_image);
+                            }
+                            req.flash('success', response.msg);
+                            res.redirect('/company');
+                        }).catch(error => {
+                            req.flash('error', error.msg);
+                            res.redirect('/company/edit/' + req.params.id);
+                        });
+                    } else {
+                        if(payloadObj.image) {
+                            fs.unlinkSync(uploadConfig.company + payloadObj.image);
+                        }
+                        req.flash('error', response.msg);
+                        res.redirect('/company/edit/' + req.params.id);
+                    }
+                }).catch(error => {
+                    req.flash('error', error.msg);
+                    res.redirect('/company/edit/' + req.params.id);
+                })
+                
+            }
+        });
+        // _Company.update(req.body, {
+        //     _id: req.params.id
+        // }).then(response => {
+        //     console.log('response ==> ', response);
+        //     // res.send('Hello data');
+        //     req.flash('success', response.msg);
+        //     res.redirect('/company');
+        // }).catch(error => {
+        //     console.log('error ==> ', error);
+        //     // res.send('Hello world');
+        //     req.flash('error', response.msg);
+        //     res.redirect('/company/add');
+        // })
     }
     // End function to update the company
+
+    // Start function to delete Company
+    deleteCompany(req, res, next) {
+        let whereClause = {
+            _id: mongoose.Types.ObjectId(req.params.id)
+        }
+        _Company.delete(whereClause, 'single').then(result => {
+            if(result.status) {
+                req.flash('success', result.msg);
+            } else {
+                req.flash('error', result.msg);
+            }
+            console.log('enter if');
+            res.redirect('/company');
+        }).catch(error => {
+            console.log('enter catch ', error);
+            req.flash('error', error.msg);
+            res.redirect('/company');
+        })
+    }
+    // End function to delete company
 
     // Start function to get the client list
     clientList(req, res, next) {

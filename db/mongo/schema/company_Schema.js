@@ -33,16 +33,10 @@ const companySchema = new mongoose.Schema({
         type: Number,
         default: 0 // 0 = Active, 1 = Inactive
     },
-    // owner_id: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: ModelHelper.getModelName(model.OWNER)
-    // },
-    // name: {
-    //     type: String
-    // },
-    // description: {
-    //     type: String
-    // }
+    image: {
+        type: String,
+        default: ''
+    }
 }, { versionKey: false, timestamps: true });
 
 // companySchema.virtual('products', {

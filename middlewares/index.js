@@ -49,11 +49,7 @@ module.exports = (app) => {
         .use(flash())
 
     Object.keys(uploadConfig).map((key) => {
-        if(key==='owner' || key==='product') {
-            app.use('/images', express.static(uploadConfig[key], { etag: false }));
-        } if(key==='invoice') {
-            app.use('/invoices', express.static(uploadConfig[key], { etag: false }));
-        }
+        app.use('/images', express.static(uploadConfig[key], { etag: false }));
     });
 
     print("Middleware Connected");
