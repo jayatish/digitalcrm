@@ -36,6 +36,9 @@ const companySchema = new mongoose.Schema({
     image: {
         type: String,
         default: ''
+    },
+    slug: {
+        type: String
     }
 }, { versionKey: false, timestamps: true });
 

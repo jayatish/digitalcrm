@@ -79,7 +79,8 @@
                                                     <div class="box-header">
                                                         <h3 class="box-title">List of Account Managers</h3>
                                                         <div class="pull-right">
-                                                            <a href="/accountManager/add" class="btn btn-primary">Add New
+                                                            <a href="/accountManager/add" class="btn btn-primary">Add
+                                                                New
                                                                 Account Manager</a>
                                                         </div>
                                                     </div>
@@ -98,8 +99,8 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <% if(accountManager){ for(var i=0; len=accountManager.length, i <
-                                                                    len; i++) { %>
+                                                                <% if(accountManager){ for(var i=0;
+                                                                    len=accountManager.length, i < len; i++) { %>
                                                                     <tr>
                                                                         <td>
                                                                             <%= (i+1) %>
@@ -114,10 +115,12 @@
                                                                             <%= accountManager[i].contact_no %>
                                                                         </td>
                                                                         <td>
-                                                                            <%= accountManager[i].company.company_name %>
+                                                                            <%= accountManager[i].company.company_name
+                                                                                %>
                                                                         </td>
                                                                         <td>
-                                                                            <img src="<%= '/images/' + accountManager[i].image %>" width="100" height="100" />
+                                                                            <img src="<%= '/images/' + accountManager[i].image %>"
+                                                                                width="100" height="100" />
                                                                         </td>
                                                                         <td class="text-center">
                                                                             <a href="<%= '/accountManager/edit/'+accountManager[i]._id %>"

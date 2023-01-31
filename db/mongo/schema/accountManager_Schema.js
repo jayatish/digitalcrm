@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 
 const accountManagerSchema = new mongoose.Schema({
     accountmanager_name: {
-        type: String
+        type: String,
     },
     email: {
         type: String
@@ -29,6 +29,20 @@ const accountManagerSchema = new mongoose.Schema({
         type: Number,
         default: 0 // 0 = Active, 1 = Inactive
     },
+    userType: {
+        type: String,
+        enum : ['AM','', '',''],
+        default: 'AM'
+    },
+    is_active: {
+        type: Number,
+        default: 0 // 0 = Inactive, 1 = Active
+    },
+    slug: {
+        type: String,
+        ref: ModelHelper.getModelName(model.COMPANY)
+
+    }
 }, { versionKey: false, timestamps: true });
 
 accountManagerSchema.pre('save', function (next) {
