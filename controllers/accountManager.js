@@ -90,7 +90,7 @@ class accountManagerController {
                         to: payloadObj.email,
                         subject: "Registration successfully",
                         // text: `SLUG Name: ${slugName}`,
-                        html: `<p> Hello <b>${accountName} </b></p>
+                        html: `<p> Hello <b>${accountName}, </b></p>
                     <p>You have successfully registered in CRM portal. Please click on the below link to generate your password.</p>
                     <a href="http://localhost:3000/create-password/${slugName}">Click Here</a>      
                     <p> Thanks and regards,</p>
