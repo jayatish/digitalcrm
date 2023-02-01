@@ -1,7 +1,5 @@
 const { log } = require('async');
-
 const _Company = require('../db/mongo/schema').COMPANY;
-
 const _AccountManager = require('../db/mongo/schema').ACCOUNTMANAGER;
 const LocalStorage = require('node-localstorage').LocalStorage,
     localStorage = new LocalStorage('./scratch');
@@ -96,6 +94,37 @@ class apiController {
         })
     }
     //End with login api using account manager
+
+    //Start with companydetails api using slugname
+    companyDetails = (req, res, next) => {
+        console.log(`Request obj:${req.headers}`);
+        let obj = req.body;
+        console.log("obj:", obj);
+
+        _Company.findOne({ slug: obj.slug }).exec((err, companyDetailsResult) => {
+            console.log(" companyDetails RESULT ======>", companyDetailsResult);
+            console.log("host is====>", req.headers.host);
+            if (companyDetailsResult) {
+                let image = companyDetailsResult.image
+                console.log("company image====>", image);
+                companyDetailsResult.image = `http://${req.headers.host}/images/${image}`;
+                return res.json({
+                    data: companyDetailsResult,
+                    success: true,
+                    msg: "Slug name matches with this company"
+                })
+            } else {
+                return res.json({
+                    success: false,
+                    msg: "This Slug name  does not exist with any company"
+                })
+            }
+        })
+    }
+
+
+
+    //End with companydetails api using slugname
 }
 module.exports = new apiController();
 
