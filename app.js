@@ -22,9 +22,9 @@ const server = http.createServer(app);
 logger.info("Database Connecting ...........");
 module.exports.exposeServer = () => server;
 //local
-db.connect(configs.mongo.host + configs.mongo.db)
+// db.connect(configs.mongo.host + configs.mongo.db)
     //live
-    // db.connect(configs.mongo.dbUri)
+    db.connect(configs.mongo.dbUri)
     .then(() => {
         return middlewares(app);
     })
