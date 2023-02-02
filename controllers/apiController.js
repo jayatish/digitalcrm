@@ -7,10 +7,35 @@ class apiController {
 
     //Start function for set-password api
     checkSlug = (req, res, next) => {
+        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         let obj = req.body;
         console.log(obj)
         let Password = req.body.password;
-        console.log('obj ==> ', obj.is_active);
+        console.log('obj ==> ', typeof (obj.slug));
+        if (obj.slug === '') {
+            return res.json({
+                success: false,
+                msg: "Slug is required"
+            })
+        }
+        if (obj.email === '') {
+            return res.json({
+                success: false,
+                msg: "Email is required"
+            })
+        }
+        if (!emailRegex.test(obj.email)) {
+            return res.json({
+                success: false,
+                msg: "Use valid email address"
+            })
+        }
+        if (obj.password === '') {
+            return res.json({
+                success: false,
+                msg: "Password is required"
+            })
+        }
         _Company.findOne({ slug: obj.slug }).exec((error, companyResult) => {
             console.log("Company result ==> ", companyResult);
             if (companyResult) {
@@ -63,9 +88,27 @@ class apiController {
     //End fuction for set-password api
     //Start with login api using account manager
     loginApi = (req, res, next) => {
+        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         console.log('req.body ==> ', req.body);
         let obj = req.body;
-
+        if (obj.email === '') {
+            return res.json({
+                success: false,
+                msg: "Please Enter email id"
+            });
+        }
+        if (!emailRegex.test(obj.email)) {
+            return res.json({
+                success: false,
+                msg: "Please Enter a valid email"
+            });
+        }
+        if (obj.password === '') {
+            return res.json({
+                success: false,
+                msg: "Please Enter password"
+            });
+        }
         _AccountManager.findOne({ email: obj.email }).exec((err, loginemailResult) => {
             console.log("LOGIN RESULT ======>", loginemailResult);
             if (loginemailResult) {
@@ -100,7 +143,12 @@ class apiController {
         // console.log(`Slug from url:${req.params.slug}`)
         let obj = req.body;
         console.log("obj:", obj);
-
+        if (obj.slug === '') {
+            return res.json({
+                success: false,
+                msg: "Please enter a slug name"
+            })
+        }
         _Company.findOne({ slug: obj.slug }).exec((err, companyDetailsResult) => {
             console.log(" companyDetails RESULT ======>", companyDetailsResult);
             console.log("host is====>", req.headers.host);
