@@ -97,8 +97,8 @@ class apiController {
 
     //Start with companydetails api using slugname
     companyDetails = (req, res, next) => {
-        console.log(`Request obj:${req.headers}`);
-        let obj = req.body;
+        console.log(`Slug from url:${req.params.slug}`)
+        let obj = req.params;
         console.log("obj:", obj);
 
         _Company.findOne({ slug: obj.slug }).exec((err, companyDetailsResult) => {
