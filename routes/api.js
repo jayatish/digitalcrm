@@ -14,7 +14,7 @@ router.post('/adminsignup', adminauth.signUp, responseHandler)
 router.post('/adminsignin', adminauth.apisignin, responseHandler)
 router.post('/set-password', apicontroller.checkSlug)
 router.post('/login', apicontroller.loginApi)
-router.get('/companydetails', apicontroller.companyDetails)
+router.post('/companydetails', apicontroller.companyDetails)
 
 // End section API list
 
